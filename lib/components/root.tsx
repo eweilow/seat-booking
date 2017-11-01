@@ -43,7 +43,7 @@ class Seat extends Component<SeatProps, SeatState> {
     
     return (
       <rect 
-        className={"seat " + [occupied && "occupied", selected && "selected"].filter(el => typeof el === "string").join("")} 
+        className={["seat", occupied && "occupied", selected && "selected"].filter(el => typeof el === "string").join(" ")} 
         width={SIZE} 
         height={SIZE} 
         onClick={() => !occupied && onClick(id)}
