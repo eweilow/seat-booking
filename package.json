@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "npm run test",
-    "build": "webpack --config webpack.js",
-    "watch": "npm run build -- --watch"
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "compression-webpack-plugin": "^1.0.1",
+    "cross-env": "^5.1.1",
     "preact": "^8.2.5",
     "ts-loader": "^3.0.5",
     "typescript": "^2.5.3",
