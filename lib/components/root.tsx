@@ -32,15 +32,15 @@ const seatStyles = `
     fill: url(#occupied);
     cursor: not-allowed;
   }
+  
+  rect.seat.occupied.selected {
+    fill: red;
+    cursor: not-allowed;
+  }
 `;
 
 class Seat extends Component<SeatProps, SeatState> {
   render({ id, onClick, occupied, selected }: SeatProps) {
-    let fill;
-    if(occupied) fill = "red";
-    else if(selected) fill = "#ffb04a";
-    else fill = "green";
-    
     return (
       <rect 
         className={["seat", occupied && "occupied", selected && "selected"].filter(el => typeof el === "string").join(" ")} 
