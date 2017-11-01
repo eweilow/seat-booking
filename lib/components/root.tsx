@@ -13,27 +13,6 @@ interface SeatState {
   hovering: boolean
 }
 
-const seatStyles = `
-  rect.seat {
-    fill: #323232;
-    stroke: #fff;
-  }
-
-  rect.seat:not(.occupied):not(.selected):hover {
-    fill: #866e50;
-    cursor: pointer;
-  }
-
-  rect.seat.occupied:not(.selected) {
-    fill: url(#occupied);
-    cursor: not-allowed;
-  }
-  
-  rect.seat.selected {
-    fill: #ffb04a;
-  }
-`;
-
 class Seat extends Component<SeatProps, SeatState> {
   render({ id, onClick, occupied, selected }: SeatProps) {
     return (
@@ -107,6 +86,9 @@ export interface RootComponentProps {
 interface RootComponentState {
   selectedId: string
   rows: Row[]
+
+  maxWidth: number
+  maxHeight: number
 };
 
 interface Row {
@@ -117,10 +99,22 @@ interface Row {
   angle: number
 }
 
+declare var require: {
+  <T>(path: string): T;
+  (paths: string[], callback: (...modules: any[]) => void): void;
+  ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
+};
+
+const styles = require("./root.css");
+const seatStyles = require("./seatStyles.css");
+
 export default class RootComponent extends Component<RootComponentProps,RootComponentState> {
   state = {
     selectedId: null,
-    rows: []
+    rows: [],
+
+    maxWidth: 0,
+    maxHeight: 0
   };
 
   componentWillMount() {
@@ -136,8 +130,19 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
     
     const deltaAngle = 90 / (props.layout.length - 1);
 
+    let maxHeight = 0;
+    let maxWidth = 0;
+
     let indexOffset = 0;
     for(let i = 0; i < props.layout.length; i++) {
+      const radAngle = (Math.PI / 180) * deltaAngle * i;
+
+      maxWidth = Math.max(maxWidth, SIZE + Math.sin(radAngle) * (170 + SIZE * props.layout[i]) + Math.cos(radAngle) * SIZE);
+      maxHeight = Math.max(maxHeight, SIZE + Math.cos(radAngle) * (170 + SIZE * props.layout[i]) - Math.sin(radAngle) * SIZE);
+
+      maxWidth = Math.max(maxWidth, SIZE + Math.sin(radAngle) * (170 + SIZE * props.layout[i]) - Math.cos(radAngle) * SIZE);
+      maxHeight = Math.max(maxHeight, SIZE + Math.cos(radAngle) * (170 + SIZE * props.layout[i]) + Math.sin(radAngle) * SIZE);
+
       rows.push({
         indexOffset,
         x: -SIZE,
@@ -149,7 +154,9 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
     }
     this.setState({
       rows,
-      selectedId: props.selectedId
+      selectedId: props.selectedId,
+      maxWidth,
+      maxHeight
     });
   }
   
@@ -162,8 +169,9 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
 
   render({layout, occupied}: RootComponentProps) {
     return (
-      <div>
-        <svg width={1000} height={1000}>
+      <div className="root" style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}>
+        <style>{styles.toString()}</style>
+        <svg width={this.state.maxWidth} height={this.state.maxHeight}>
           <defs>
             <pattern id="occupied" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)" width="10" height="10">
               <rect fill="#ffccd5" x="0" y="0" width="10" height="10"/>
@@ -178,7 +186,7 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
               ))
             }
           </g>
-          <style>{seatStyles}</style>
+          <style>{seatStyles.toString()}</style>
         </svg>
       </div>
     );

@@ -11,7 +11,16 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.tsx?$/, loader: "ts-loader" }
+      { test: /\.tsx?$/, loader: "ts-loader" },
+      { test: /\.css$/, use: [
+        { "loader": "css-loader", options: { minimize: true } },
+        { "loader": "postcss-loader", options: { 
+          plugins: (loader) => [
+            require("autoprefixer")(),
+            require("cssnano")()
+          ]
+        } }
+      ] }
     ]
   },
   plugins: [

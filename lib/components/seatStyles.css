@@ -1,0 +1,18 @@
+rect.seat {
+  fill: #323232;
+  stroke: #fff;
+}
+
+rect.seat:not(.occupied):not(.selected):hover {
+  fill: #866e50;
+  cursor: pointer;
+}
+
+rect.seat.occupied:not(.selected) {
+  fill: url(#occupied);
+  cursor: not-allowed;
+}
+
+rect.seat.selected {
+  fill: #ffb04a;
+}
