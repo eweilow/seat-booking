@@ -24,18 +24,13 @@ const seatStyles = `
     cursor: pointer;
   }
 
-  rect.seat.selected {
-    fill: #ffb04a;
-  }
-
-  rect.seat.occupied {
+  rect.seat.occupied:not(.selected) {
     fill: url(#occupied);
     cursor: not-allowed;
   }
   
-  rect.seat.occupied.selected {
-    fill: red;
-    cursor: not-allowed;
+  rect.seat.selected {
+    fill: #ffb04a;
   }
 `;
 
@@ -102,9 +97,10 @@ const RowOfTables = ({ onClick, occupied, tableCount, selectedId, originX, origi
   );
 };
 
-interface RootComponentProps {
+export interface RootComponentProps {
   layout: number[]
   occupied: string[]
+  selectedId: string
   onSeatSelected: (id: string) => void
 }
 
@@ -152,7 +148,8 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
       indexOffset += props.layout[i] * 2;
     }
     this.setState({
-      rows
+      rows,
+      selectedId: props.selectedId
     });
   }
   
