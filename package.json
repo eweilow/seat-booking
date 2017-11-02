@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "npm run test",
+    "test": "tslint --project tslint.json",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch"
   },
@@ -34,5 +34,9 @@
     "ts-loader": "^3.0.5",
     "typescript": "^2.5.3",
     "webpack": "^3.8.1"
+  },
+  "devDependencies": {
+    "tslint": "^5.8.0",
+    "tslint-react": "^3.2.0"
   }
 }
