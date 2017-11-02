@@ -7,9 +7,6 @@ This package contains a web component, `seat-booking`, which allows for seats to
 The simplest usage of the component is as follows:
 ```html
 <html>
-  <head>
-    <link rel="stylesheet" href="style.css"/>
-  </head>
   <body>
     <seat-booking
       data-layout="6,5,8,8"
