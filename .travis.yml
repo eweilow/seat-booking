@@ -18,6 +18,3 @@ deploy:
   on:
     repo: eweilow/seat-booking
     tags: true
-  branches:
-    only:
-      - master
