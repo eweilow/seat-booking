@@ -1,5 +1,5 @@
 import { h, render } from "preact";
-import RootComponent, { RootComponentProps } from "./components/root";
+import RootComponent, { IRootComponentProps } from "./components/root";
 
 type SeatBookingAttribute = "data-layout" | "data-occupied" | "data-selected-seat";
 
@@ -12,19 +12,26 @@ export default class SeatBooking extends HTMLElement {
   private canRender: boolean = false;
   private selectedSeat: string = null;
 
-  set layoutAttribute(value: string) {
+  private set layoutAttribute(value: string) {
     if (value == null || !/^\d+(?:\,\d+)*$/.test(value)) {
       throw new Error(`Expected attribute data-layout with value '${value}' to be valid (regexp: /^\d+(?:\,\d+)*$/)`);
     }
-    this.layout = value.split(",").filter(el => el.length > 0).map(str => parseInt(str)).filter(el => !isNaN(el));
+    this.layout = value.split(",")
+      .filter(el => el.length > 0)
+      .map(str => parseInt(str, 10))
+      .filter(el => !isNaN(el));
   }
-  set occupiedAttribute(value: string) {
+  private set occupiedAttribute(value: string) {
     if (value == null || !/^\d+(?:\,\d+)*$/.test(value)) {
       throw new Error(`Expected attribute data-occupied with value '${value}' to be valid (regexp: /^\d+(?:\,\d+)*$/)`);
     }
-    this.occupied = value.split(",").filter(el => el.length > 0).map(str => parseInt(str)).filter(el => !isNaN(el)).map(el => el.toString());
+    this.occupied = value.split(",")
+      .filter(el => el.length > 0)
+      .map(str => parseInt(str, 10))
+      .filter(el => !isNaN(el))
+      .map(el => el.toString());
   }
-  set selectedSeatAttribute(value: string) {
+  private set selectedSeatAttribute(value: string) {
     if (!/^\d+$/.test(value)) {
       throw new Error(`Expected attribute data-selected-seat with value '${value}' to be valid (regexp: /^\d+$/)`);
     }
@@ -44,9 +51,9 @@ export default class SeatBooking extends HTMLElement {
     this.shadow = this.attachShadow({ mode: "open" }) as Element | ShadowRoot;
   }
 
-  public connectedCallback(): void {
+  private connectedCallback(): void {
     this.renderedNode = this.renderChildren(this.renderedNode);
-    this.canRender = true; //prevent rendering multiple times before node connects
+    this.canRender = true; // prevent rendering multiple times before this component connects
   }
 
   private onSeatSelected = (seatId: string): void => {
@@ -56,8 +63,8 @@ export default class SeatBooking extends HTMLElement {
     this.dispatchEvent(new CustomEvent("seat-selected", { detail: { seatId }}));
   }
 
-  public renderChildren(replaceNode?: Element): Element {
-    const props: RootComponentProps = {
+  private renderChildren(replaceNode?: Element): Element {
+    const props: IRootComponentProps = {
       selectedId: this.selectedSeat,
       layout: this.layout,
       occupied: this.occupied,
@@ -66,7 +73,7 @@ export default class SeatBooking extends HTMLElement {
     return render(h(RootComponent, props), (this.shadow as Element), this.renderedNode);
   }
 
-  public attributeChangedCallback(attribute: SeatBookingAttribute, oldValue: string, newValue: string) {
+  private attributeChangedCallback(attribute: SeatBookingAttribute, oldValue: string, newValue: string) {
     if (attribute === "data-layout") {
       this.layoutAttribute = newValue;
     } else if (attribute === "data-occupied") {

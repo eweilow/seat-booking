@@ -13,22 +13,22 @@ import OccupiedSeatPattern from "./occupiedSeatPattern";
 import RowOfTables from "./rowOfTables";
 import { SeatSize } from "./seat";
 
-export interface RootComponentProps {
+export interface IRootComponentProps {
   layout: number[];
   occupied: string[];
   selectedId: string;
   onSeatSelected: (id: string) => void;
 }
 
-interface RootComponentState {
+interface IRootComponentState {
   selectedId: string;
-  rows: Row[];
+  rows: IRow[];
 
   maxWidth: number;
   maxHeight: number;
 }
 
-interface Row {
+interface IRow {
   indexOffset: number;
   x: number;
   y: number;
@@ -39,7 +39,7 @@ interface Row {
 const styles = require("./root.css");
 const seatStyles = require("./seatStyles.css");
 
-export default class RootComponent extends Component<RootComponentProps, RootComponentState> {
+export default class RootComponent extends Component<IRootComponentProps, IRootComponentState> {
   public state = {
     selectedId: null,
     rows: [],
@@ -57,27 +57,49 @@ export default class RootComponent extends Component<RootComponentProps, RootCom
   }
 
   public updateRows(props) {
-    const rows: Row[] = [];
+    const rows: IRow[] = [];
 
     const deltaAngle = 90 / (props.layout.length - 1);
 
     let maxHeight = 0;
     let maxWidth = 0;
 
+    const startRadius = Math.floor(5.5 * SeatSize);
+
     let indexOffset = 0;
     for (let i = 0; i < props.layout.length; i++) {
       const radAngle = (Math.PI / 180) * deltaAngle * i;
 
-      maxWidth = Math.max(maxWidth, SeatSize + Math.sin(radAngle) * (170 + SeatSize * props.layout[i]) + Math.cos(radAngle) * SeatSize);
-      maxHeight = Math.max(maxHeight, SeatSize + Math.cos(radAngle) * (170 + SeatSize * props.layout[i]) - Math.sin(radAngle) * SeatSize);
+      maxWidth = Math.max(
+        maxWidth,
+        SeatSize
+          + Math.sin(radAngle) * (startRadius + SeatSize * props.layout[i])
+          + Math.cos(radAngle) * SeatSize
+      );
+      maxWidth = Math.max(
+        maxWidth,
+        SeatSize
+          + Math.sin(radAngle) * (startRadius + SeatSize * props.layout[i])
+          - Math.cos(radAngle) * SeatSize
+      );
 
-      maxWidth = Math.max(maxWidth, SeatSize + Math.sin(radAngle) * (170 + SeatSize * props.layout[i]) - Math.cos(radAngle) * SeatSize);
-      maxHeight = Math.max(maxHeight, SeatSize + Math.cos(radAngle) * (170 + SeatSize * props.layout[i]) + Math.sin(radAngle) * SeatSize);
+      maxHeight = Math.max(
+        maxHeight,
+        SeatSize
+          + Math.cos(radAngle) * (startRadius + SeatSize * props.layout[i])
+          - Math.sin(radAngle) * SeatSize
+      );
+      maxHeight = Math.max(
+        maxHeight,
+        SeatSize
+          + Math.cos(radAngle) * (startRadius + SeatSize * props.layout[i])
+          + Math.sin(radAngle) * SeatSize
+      );
 
       rows.push({
         indexOffset,
         x: -SeatSize,
-        y: 170,
+        y: startRadius,
         seatGroups: props.layout[i],
         angle: deltaAngle * i
       });
@@ -98,7 +120,7 @@ export default class RootComponent extends Component<RootComponentProps, RootCom
     this.props.onSeatSelected(id);
   }
 
-  public render({layout, occupied}: RootComponentProps) {
+  public render({layout, occupied}: IRootComponentProps) {
     return (
       <div className="root" style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}>
         <style>{styles.toString()}</style>
@@ -109,7 +131,16 @@ export default class RootComponent extends Component<RootComponentProps, RootCom
           <g transform={`translate(${SeatSize}, ${SeatSize})`}>
             {
               this.state.rows.map(el => (
-                <RowOfTables occupied={occupied} indexOffset={el.indexOffset} originX={el.x} originY={el.y} angle={el.angle} selectedId={this.state.selectedId} onClick={this.onSeatClicked} tableCount={el.seatGroups}/>
+                <RowOfTables
+                  occupied={occupied}
+                  indexOffset={el.indexOffset}
+                  originX={el.x}
+                  originY={el.y}
+                  angle={el.angle}
+                  selectedId={this.state.selectedId}
+                  onClick={this.onSeatClicked}
+                  tableCount={el.seatGroups}
+                />
               ))
             }
           </g>

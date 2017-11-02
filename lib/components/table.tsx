@@ -1,9 +1,7 @@
 import { h } from "preact";
+import Seat, { SeatSize } from "./seat";
 
-import Seat from "./seat";
-import { SeatSize } from "./seat";
-
-interface TableProps {
+interface ITableProps {
   occupied: string[];
 
   leftSeatId: string;
@@ -11,14 +9,24 @@ interface TableProps {
   selectedId: string;
   onClick: (id: string) => void;
 }
-const Table = ({ occupied, leftSeatId, rightSeatId, selectedId, onClick }: TableProps) => {
+const Table = ({ occupied, leftSeatId, rightSeatId, selectedId, onClick }: ITableProps) => {
   return (
     <g>
       <g transform={`translate(0,0)`}>
-        <Seat occupied={occupied.indexOf(leftSeatId) >= 0} selected={leftSeatId === selectedId} id={leftSeatId} onClick={onClick}/>
+        <Seat
+          occupied={occupied.indexOf(leftSeatId) >= 0}
+          selected={leftSeatId === selectedId}
+          id={leftSeatId}
+          onClick={onClick}
+        />
       </g>
       <g transform={`translate(${SeatSize},0)`}>
-        <Seat occupied={occupied.indexOf(rightSeatId) >= 0} selected={rightSeatId === selectedId} id={rightSeatId} onClick={onClick}/>
+        <Seat
+          occupied={occupied.indexOf(rightSeatId) >= 0}
+          selected={rightSeatId === selectedId}
+          id={rightSeatId}
+          onClick={onClick}
+        />
       </g>
     </g>
   );

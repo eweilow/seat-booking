@@ -1,9 +1,8 @@
 import { h } from "preact";
-
 import { SeatSize } from "./seat";
 import Table from "./table";
 
-interface RowOfTablesProps {
+interface IRowOfTablesProps {
   occupied: string[];
 
   indexOffset: number;
@@ -16,17 +15,22 @@ interface RowOfTablesProps {
   angle: number;
 }
 
-const RowOfTables = ({ onClick, occupied, tableCount, selectedId, originX, originY, angle, indexOffset }: RowOfTablesProps) => {
+const RowOfTables = (props: IRowOfTablesProps) => {
+  const { onClick, occupied, tableCount, selectedId, originX, originY, angle, indexOffset } = props;
   return (
     <g transform={` rotate(${-angle}) translate(${originX}, ${originY})`}>
       {
-        [...new Array(tableCount)].map((el, index) => {
-          return (
-            <g transform={`translate(0,${index * SeatSize})`}>
-              <Table occupied={occupied} selectedId={selectedId} onClick={onClick} leftSeatId={(indexOffset + index).toString()} rightSeatId={(indexOffset + index + tableCount).toString()}/>
-            </g>
-          );
-        })
+        [...new Array(tableCount)].map((el, index) => (
+          <g key={index.toString()} transform={`translate(0,${index * SeatSize})`}>
+            <Table
+              occupied={occupied}
+              selectedId={selectedId}
+              onClick={onClick}
+              leftSeatId={(indexOffset + index).toString()}
+              rightSeatId={(indexOffset + index + tableCount).toString()}
+            />
+          </g>
+        ))
       }
     </g>
   );
