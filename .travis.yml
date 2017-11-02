@@ -1,5 +1,14 @@
 language: node_js
 node_js:
-  - "8"
+- '8'
 script:
-  - npm run test
+- npm run test
+- npm run build
+
+deploy:
+  provider: releases
+  api_key:
+    secure: MRPmCBaZjYBtDEZAXeaLWXSNdclvPITDMEdaC4whjaV4Qzz1JndSEdS5L/QJtkFQ9M9BnbgR4cCECwYABhCOPptDVZU0LNiEA5pma0Ht8BErPi8sq9DWGJOaZEoqoORQPlmAjHfiHBMRqX0djOHWIhs0ZmYCGncFkeiN+SjEbbwJpDvmUeOIWiQjAitm0aU/i9DXsJd6A0PLIaS4mC0p/PEsKVPvzJPJOUrQqyZyg8/OfOgYFSt9URq9GcqSPO7jXEJexjSslXziE1Zky6t6a1XVpBFnlJW2xP2ScGofVTZMbmkbcsVQVMzsoaWlCw5zjcRxIw83qeDKOXpP6irnO2sd2CL37BlFC9VD+4ygbKmhbq5tYxCVsSK4fXrMRjhkibRjtOcBoLAZp/cg7TA+hq64IO/JBsNrB4zIEfWMuKuBeZg0pxptl4nClwrdMurqDfSU2icl24D7gpAJvV4XoS3I0qqbMRsC4ucxpCHadc/sLm34zsM5rfxhOEK/6PS4qTNz65u3g6lwLTCZ3knqNnWPgW4843MrEYMs77F2AlVRlW8cWJyCJO+WRYidU/ySVMxsxsa13LE5k1TetgsW2Ue6wQ6uoOzvVnGZg6ldpnzMXfbfetRdgfLb9mwh7HoRspQSzs4M+B3srt310TdUwPlGQ7brqBLaDWAV7XbF2nE=
+  local_dir: dist
+  on:
+    repo: eweilow/seat-booking
