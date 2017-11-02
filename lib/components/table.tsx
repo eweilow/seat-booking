@@ -4,13 +4,13 @@ import Seat from "./seat";
 import { SeatSize } from "./seat";
 
 interface TableProps {
-  occupied: string[]
+  occupied: string[];
 
-  leftSeatId: string
-  rightSeatId: string
-  selectedId: string
-  onClick: (id: string) => void
-};
+  leftSeatId: string;
+  rightSeatId: string;
+  selectedId: string;
+  onClick: (id: string) => void;
+}
 const Table = ({ occupied, leftSeatId, rightSeatId, selectedId, onClick }: TableProps) => {
   return (
     <g>
@@ -22,5 +22,5 @@ const Table = ({ occupied, leftSeatId, rightSeatId, selectedId, onClick }: Table
       </g>
     </g>
   );
-}
+};
 export default Table;

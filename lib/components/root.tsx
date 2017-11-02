@@ -1,4 +1,4 @@
-import { h, Component } from "preact";
+import { Component, h } from "preact";
 
 /*
  * Needed to be able to use Webpack's imports for loading styles
@@ -9,38 +9,38 @@ declare var require: {
   ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
 };
 
-import { SeatSize } from "./seat";
-import RowOfTables from "./rowOfTables";
 import OccupiedSeatPattern from "./occupiedSeatPattern";
+import RowOfTables from "./rowOfTables";
+import { SeatSize } from "./seat";
 
 export interface RootComponentProps {
-  layout: number[]
-  occupied: string[]
-  selectedId: string
-  onSeatSelected: (id: string) => void
+  layout: number[];
+  occupied: string[];
+  selectedId: string;
+  onSeatSelected: (id: string) => void;
 }
 
 interface RootComponentState {
-  selectedId: string
-  rows: Row[]
+  selectedId: string;
+  rows: Row[];
 
-  maxWidth: number
-  maxHeight: number
-};
+  maxWidth: number;
+  maxHeight: number;
+}
 
 interface Row {
-  indexOffset: number
-  x: number
-  y: number
-  seatGroups: number
-  angle: number
+  indexOffset: number;
+  x: number;
+  y: number;
+  seatGroups: number;
+  angle: number;
 }
 
 const styles = require("./root.css");
 const seatStyles = require("./seatStyles.css");
 
-export default class RootComponent extends Component<RootComponentProps,RootComponentState> {
-  state = {
+export default class RootComponent extends Component<RootComponentProps, RootComponentState> {
+  public state = {
     selectedId: null,
     rows: [],
 
@@ -48,24 +48,24 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
     maxHeight: 0
   };
 
-  componentWillMount() {
+  public componentWillMount() {
     this.updateRows(this.props);
   }
 
-  componentWillReceiveProps(newProps) {
+  public componentWillReceiveProps(newProps) {
     this.updateRows(newProps);
   }
 
-  updateRows(props) {
-    let rows: Row[] = [];
-    
+  public updateRows(props) {
+    const rows: Row[] = [];
+
     const deltaAngle = 90 / (props.layout.length - 1);
 
     let maxHeight = 0;
     let maxWidth = 0;
 
     let indexOffset = 0;
-    for(let i = 0; i < props.layout.length; i++) {
+    for (let i = 0; i < props.layout.length; i++) {
       const radAngle = (Math.PI / 180) * deltaAngle * i;
 
       maxWidth = Math.max(maxWidth, SeatSize + Math.sin(radAngle) * (170 + SeatSize * props.layout[i]) + Math.cos(radAngle) * SeatSize);
@@ -90,15 +90,15 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
       maxHeight
     });
   }
-  
-  onSeatClicked = (id: string): void  => {
+
+  public onSeatClicked = (id: string): void  => {
     this.setState({
       selectedId: id
     });
     this.props.onSeatSelected(id);
-  };
+  }
 
-  render({layout, occupied}: RootComponentProps) {
+  public render({layout, occupied}: RootComponentProps) {
     return (
       <div className="root" style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}>
         <style>{styles.toString()}</style>

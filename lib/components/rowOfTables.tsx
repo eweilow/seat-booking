@@ -1,19 +1,19 @@
 import { h } from "preact";
 
-import Table from "./table";
 import { SeatSize } from "./seat";
+import Table from "./table";
 
 interface RowOfTablesProps {
-  occupied: string[]
-  
-  indexOffset: number
-  tableCount: number
-  selectedId: string
-  onClick: (id) => void
+  occupied: string[];
 
-  originX: number
-  originY: number
-  angle: number
+  indexOffset: number;
+  tableCount: number;
+  selectedId: string;
+  onClick: (id) => void;
+
+  originX: number;
+  originY: number;
+  angle: number;
 }
 
 const RowOfTables = ({ onClick, occupied, tableCount, selectedId, originX, originY, angle, indexOffset }: RowOfTablesProps) => {
