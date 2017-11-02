@@ -41,11 +41,10 @@ const seatStyles = require("./seatStyles.css");
 
 export default class RootComponent extends Component<IRootComponentProps, IRootComponentState> {
   public state = {
-    selectedId: null,
-    rows: [],
-
     maxWidth: 0,
-    maxHeight: 0
+    maxHeight: 0,
+    rows: [],
+    selectedId: null
   };
 
   public componentWillMount() {

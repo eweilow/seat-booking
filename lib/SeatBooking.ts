@@ -65,10 +65,10 @@ export default class SeatBooking extends HTMLElement {
 
   private renderChildren(replaceNode?: Element): Element {
     const props: IRootComponentProps = {
-      selectedId: this.selectedSeat,
       layout: this.layout,
       occupied: this.occupied,
-      onSeatSelected: this.onSeatSelected
+      onSeatSelected: this.onSeatSelected,
+      selectedId: this.selectedSeat
     };
     return render(h(RootComponent, props), (this.shadow as Element), this.renderedNode);
   }
