@@ -1,5 +1,6 @@
 const MinifyPlugin = require("babel-minify-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./lib/index.ts",
@@ -26,6 +27,7 @@ module.exports = {
   plugins: [
     new MinifyPlugin(),
     new CompressionPlugin(),
+    new CopyPlugin([ { context: "lib/demo", from: "**/*", to: "dist" } ])
   ],
   devtool: process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map"
 };
