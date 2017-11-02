@@ -17,4 +17,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: eweilow/seat-booking
-    branch: master
+    tags: true
