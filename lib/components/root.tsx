@@ -173,10 +173,7 @@ export default class RootComponent extends Component<RootComponentProps,RootComp
         <style>{styles.toString()}</style>
         <svg width={this.state.maxWidth} height={this.state.maxHeight}>
           <defs>
-            <pattern id="occupied" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)" width="10" height="10">
-              <rect fill="#ffccd5" x="0" y="0" width="10" height="10"/>
-              <line x1="5" y="0" x2="5" y2="10" stroke="#ed0a47" stroke-width="5" />
-            </pattern>
+            <OccupiedSeatPattern size={10} id="occupied"/>
           </defs>
 
           <g transform={`translate(${SIZE}, ${SIZE})`}>
