@@ -28,9 +28,9 @@ export default class Seat extends Component<ISeatProps, ISeatState> {
         data-selected={selected}
         className={
           [
-            "seat",
-            occupied && "occupied",
-            selected && "selected"
+            "SEATBOOKING-seat",
+            occupied && "SEATBOOKING-occupied",
+            selected && "SEATBOOKING-selected"
           ]
           .filter(el => typeof el === "string")
           .join(" ")

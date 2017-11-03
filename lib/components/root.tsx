@@ -121,7 +121,7 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
 
   public render({layout, occupied}: IRootComponentProps) {
     return (
-      <div className="root" style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}>
+      <div className="SEATBOOKING-root" style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}>
         <style>{styles.toString()}</style>
         <svg width={this.state.maxWidth} height={this.state.maxHeight}>
           <defs>
