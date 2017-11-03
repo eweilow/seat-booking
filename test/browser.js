@@ -16,6 +16,8 @@ async function startServer() {
   
 }
 
+const runSelectSeatTests = require("./selectSeats");
+const runOccupiedSeatTests = require("./occupiedSeats");
 async function tests(page, browser) {
   const expectToBeOccupied = [
     2,
@@ -27,44 +29,12 @@ async function tests(page, browser) {
     const el = document.querySelector("seat-booking");
     el.setAttribute("data-layout", "2,3,4,5");
     el.setAttribute("data-occupied", expectToBeOccupied);
-    el.setAttribute("data-selected", null);
+    el.setAttribute("data-selected-seat", null);
     return el;
   }, expectToBeOccupied.map(el => el.toString()).join(","));
 
-  const shadowRootRectsHandle = await page.evaluateHandle((root) => {
-    const shadowRoot = root.shadowRoot;
-    return Array.from(shadowRoot.querySelectorAll("rect:not([data-occupied])[data-id]"));
-  }, rootHandle);
-
-  const properties = await shadowRootRectsHandle.getProperties();
-  const children = [];
-  for (const property of properties.values()) {
-    const element = property.asElement();
-    if (element) {
-      children.push(element);
-    }
-  }
-  
-  for(let child of children) {
-    const evalResult = JSON.parse(await page.evaluate(async (root, rect) => {
-      return new Promise((resolve, reject) => {
-        try {
-          const listener = (e) => {
-            root.removeEventListener("seat-selected", listener);
-            resolve(JSON.stringify({ match: e.detail.seatId === rect.getAttribute("data-id"), seatId: e.detail.seatId, attr: rect.getAttribute("data-id") }));
-          };
-          root.addEventListener("seat-selected", listener);
-          rect.dispatchEvent(new Event("click"));
-        } catch(err) {
-          reject(err);
-        }
-      })
-    }, rootHandle, child));
-
-    if(!evalResult.match) {
-      throw new Error(`Expected event on seat-booking to return '${evalResult.attr}' but got '${evalResult.seatId}'`);
-    }
-  }
+  await runSelectSeatTests(page, rootHandle);
+  await runOccupiedSeatTests(page, rootHandle);
 }
 
 let server;
