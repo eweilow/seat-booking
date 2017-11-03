@@ -39,6 +39,8 @@ async function tests(page, browser) {
 
 let server;
 (async function main(headless){
+  let status = 0;
+
   server = await startServer();
 
   const browser = await puppeteer.launch({ 
@@ -55,15 +57,18 @@ let server;
     console.log("Tests passed. Closing browser.");
   } catch(err) {
     console.error(err);
-    process.statusCode = 1;
+    status = 1;
     console.log("Tests failed. Closing browser.");
   }
   await browser.close();
   console.log("Browser closed.");
   server.close();
+
+  process.exit(status);
 })(true)
-.then(() => console.log("Done."))
 .catch((err) => {
   console.error(err);
   if(server.listening) server.close();
+  
+  process.exit(1);
 });
