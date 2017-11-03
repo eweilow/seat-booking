@@ -4,8 +4,9 @@ node_js:
 install:
 - npm install --no-save
 script:
-- npm run test
+- npm run lint
 - npm run build
+- npm run puppeteer
 
 deploy:
   provider: releases
