@@ -15,6 +15,8 @@ deploy:
   file:
     - "dist/bundle.js"
     - "dist/bundle.js.map"
+    - "dist/custom-elements.min.js"
+    - "dist/custom-elements.min.js.map"
   skip_cleanup: true
   on:
     repo: eweilow/seat-booking

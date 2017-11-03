@@ -48,7 +48,9 @@ export default class SeatBooking extends HTMLElement {
 
   constructor() {
     super();
-    this.shadow = this.attachShadow({ mode: "open" }) as Element | ShadowRoot;
+    this.shadow = false && "shadowRoot" in HTMLElement.prototype 
+      ? this.attachShadow({ mode: "open" }) as Element | ShadowRoot
+      : this;
   }
 
   private connectedCallback(): void {

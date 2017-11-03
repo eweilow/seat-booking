@@ -27,7 +27,11 @@ module.exports = {
   plugins: [
     new MinifyPlugin(),
     new CompressionPlugin(),
-    new CopyPlugin([ { context: "lib/demo", from: "**/*", to: "dist" } ])
+    new CopyPlugin([ 
+      { context: "lib/demo", from: "**/*", to: "dist" },
+      { context: "node_modules/@webcomponents/custom-elements", from: "custom-elements.min.js", to: "dist" },
+      { context: "node_modules/@webcomponents/custom-elements", from: "custom-elements.min.js.map", to: "dist" } 
+    ])
   ],
   devtool: process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map"
 };
