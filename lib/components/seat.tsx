@@ -23,6 +23,9 @@ export default class Seat extends Component<ISeatProps, ISeatState> {
   public render({ id, onClick, occupied, selected }: ISeatProps) {
     return (
       <rect
+        data-id={id}
+        data-occupied={occupied}
+        data-selected={selected}
         className={
           [
             "seat",

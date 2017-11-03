@@ -4,7 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "tslint --project tslint.json",
+    "test": "npm run lint && npm run puppeteer",
+    "lint": "cross-env NODE_ENV=production tslint --project tslint.json",
+    "puppeteer": "cross-env NODE_ENV=production node test/browser.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch"
   },
@@ -37,6 +39,8 @@
     "webpack": "^3.8.1"
   },
   "devDependencies": {
+    "express": "^4.16.2",
+    "puppeteer": "^0.12.0",
     "tslint": "^5.8.0",
     "tslint-react": "^3.2.0"
   }
