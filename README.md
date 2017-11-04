@@ -1,5 +1,5 @@
 # seat-planner
-![Travis badge](https://travis-ci.org/eweilow/seat-booking.svg?branch=master)
+[![Travis badge](https://travis-ci.org/eweilow/seat-booking.svg?branch=master)](https://travis-ci.org/eweilow/seat-booking)
 
 This package contains a web component, `seat-booking`, which allows for seats to be booked.
 
