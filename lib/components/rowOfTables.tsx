@@ -3,6 +3,8 @@ import { SeatSize } from "./seat";
 import Table from "./table";
 
 interface IRowOfTablesProps {
+  key: string;
+  
   occupied: string[];
 
   indexOffset: number;
@@ -15,12 +17,19 @@ interface IRowOfTablesProps {
   angle: number;
 }
 
+function arrayOfLength(length: number) {
+  let arr = new Array();
+  for(let i = 0; i < length; i++) {
+    arr.push(i);
+  }
+  return arr;
+}
 const RowOfTables = (props: IRowOfTablesProps) => {
   const { onClick, occupied, tableCount, selectedId, originX, originY, angle, indexOffset } = props;
   return (
-    <g transform={` rotate(${-angle}) translate(${originX}, ${originY})`}>
+    <g className="SEATBOOKING-rowOfTables" transform={`rotate(${-angle}) translate(${originX}, ${originY})`}>
       {
-        [...new Array(tableCount)].map((el, index) => (
+        arrayOfLength(tableCount).map((el, index) => (
           <g key={index.toString()} transform={`translate(0,${index * SeatSize})`}>
             <Table
               occupied={occupied}
