@@ -120,8 +120,12 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
   }
 
   public render({layout, occupied}: IRootComponentProps) {
+    console.log(this.state.rows);
     return (
-      <div className="root" style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}>
+      <div
+        className="SEATBOOKING-root"
+        style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}
+      >
         <style>{styles.toString()}</style>
         <svg width={this.state.maxWidth} height={this.state.maxHeight}>
           <defs>
@@ -129,8 +133,10 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
           </defs>
           <g transform={`translate(${SeatSize}, ${SeatSize})`}>
             {
-              this.state.rows.map(el => (
+              this.state.rows.map((el, index) => (
                 <RowOfTables
+                  key={index.toString()}
+
                   occupied={occupied}
                   indexOffset={el.indexOffset}
                   originX={el.x}

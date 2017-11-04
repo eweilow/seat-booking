@@ -4,8 +4,9 @@ node_js:
 install:
 - npm install --no-save
 script:
-- npm run test
+- npm run lint
 - npm run build
+- npm run puppeteer
 
 deploy:
   provider: releases
@@ -14,6 +15,8 @@ deploy:
   file:
     - "dist/bundle.js"
     - "dist/bundle.js.map"
+    - "dist/custom-elements.min.js"
+    - "dist/custom-elements.min.js.map"
   skip_cleanup: true
   on:
     repo: eweilow/seat-booking

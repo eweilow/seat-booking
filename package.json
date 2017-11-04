@@ -4,7 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "tslint --project tslint.json",
+    "test": "npm run lint && npm run puppeteer",
+    "lint": "cross-env NODE_ENV=production tslint --project tslint.json",
+    "lint-fix": "npm run lint -- --fix",
+    "puppeteer": "cross-env NODE_ENV=production node test/browser.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch"
   },
@@ -19,6 +22,8 @@
   },
   "homepage": "https://github.com/eweilow/seat-booking#readme",
   "dependencies": {
+    "@webcomponents/custom-elements": "github:webcomponents/custom-elements",
+    "@webcomponents/webcomponentsjs": "github:webcomponents/webcomponentsjs",
     "autoprefixer": "^7.1.6",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -37,6 +42,8 @@
     "webpack": "^3.8.1"
   },
   "devDependencies": {
+    "express": "^4.16.2",
+    "puppeteer": "^0.12.0",
     "tslint": "^5.8.0",
     "tslint-react": "^3.2.0"
   }

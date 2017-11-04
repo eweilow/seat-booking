@@ -23,11 +23,14 @@ export default class Seat extends Component<ISeatProps, ISeatState> {
   public render({ id, onClick, occupied, selected }: ISeatProps) {
     return (
       <rect
+        data-id={id}
+        data-occupied={occupied}
+        data-selected={selected}
         className={
           [
-            "seat",
-            occupied && "occupied",
-            selected && "selected"
+            "SEATBOOKING-seat",
+            occupied && "SEATBOOKING-occupied",
+            selected && "SEATBOOKING-selected"
           ]
           .filter(el => typeof el === "string")
           .join(" ")
