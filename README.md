@@ -3,6 +3,8 @@
 
 This package contains a web component, `seat-booking`, which allows for seats to be booked.
 
+A demo can be found at [https://seatbooking.netlify.com/](https://seatbooking.netlify.com/).
+
 ## Example usage
 The simplest usage of the component is as follows:
 ```html
