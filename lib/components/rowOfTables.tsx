@@ -4,7 +4,7 @@ import Table from "./table";
 
 interface IRowOfTablesProps {
   key: string;
-  
+
   occupied: string[];
 
   indexOffset: number;
@@ -18,8 +18,8 @@ interface IRowOfTablesProps {
 }
 
 function arrayOfLength(length: number) {
-  let arr = new Array();
-  for(let i = 0; i < length; i++) {
+  const arr = new Array();
+  for (let i = 0; i < length; i++) {
     arr.push(i);
   }
   return arr;

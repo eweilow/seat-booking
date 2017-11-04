@@ -1,18 +1,18 @@
-import createSeatBookingClass from "./SeatBooking";
 import "../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js";
+import createSeatBookingClass from "./SeatBooking";
 
 function init() {
   console.info("[seat-booking] initing");
   customElements.define("seat-booking", createSeatBookingClass());
 }
 
-function loadScript (src) { 
+function loadScript(src) {
   return new Promise((resolve, reject) => {
-    const _script = document.createElement("script");
-    _script.src = src;
-    _script.onload = () => resolve();
-    _script.onerror = (err) => reject(err);
-    document.body.appendChild(_script);
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = () => resolve();
+    script.onerror = err => reject(err);
+    document.body.appendChild(script);
   });
 }
 if (!("customElements" in window && "define" in customElements)
