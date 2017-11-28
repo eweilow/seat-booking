@@ -18,6 +18,7 @@ async function startServer() {
 
 const runSelectSeatTests = require("./selectSeats");
 const runOccupiedSeatTests = require("./occupiedSeats");
+const runOverrideOccupiedSeatTests = require("./overrideOccupiedSeats");
 async function tests(page, browser) {
   const expectToBeOccupied = [
     2,
@@ -35,6 +36,7 @@ async function tests(page, browser) {
 
   await runSelectSeatTests(page, rootHandle);
   await runOccupiedSeatTests(page, rootHandle);
+  await runOverrideOccupiedSeatTests(page, rootHandle);
 }
 
 let server;

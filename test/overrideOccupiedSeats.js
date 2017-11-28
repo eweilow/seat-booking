@@ -1,7 +1,7 @@
 module.exports = async function runOccupiedSeatTests(page, rootHandle) {
   const shadowRootRectsHandle = await page.evaluateHandle((root) => {
     root.setAttribute("data-selected-seat", "1");
-    root.removeAttribute("data-can-override");
+    root.setAttribute("data-can-override", "true");
 
     const shadowRoot = root.shadowRoot;
     return Array.from(shadowRoot.querySelectorAll("rect[data-occupied][data-id]"));
@@ -23,7 +23,7 @@ module.exports = async function runOccupiedSeatTests(page, rootHandle) {
         try {
           rect.dispatchEvent(new Event("click"));
           setTimeout(() => {
-            resolve(JSON.stringify({ match: root.getAttribute("data-selected-seat") === "1", seatId: "1", attr: rect.getAttribute("data-id") }));
+            resolve(JSON.stringify({ match: root.getAttribute("data-selected-seat") === rect.getAttribute("data-id"), seatId: "1", attr: rect.getAttribute("data-id") }));
           });
         } catch(err) {
           reject(err);
@@ -32,7 +32,7 @@ module.exports = async function runOccupiedSeatTests(page, rootHandle) {
     }, rootHandle, child));
 
     if(!evalResult.match) {
-      throw new Error(`Expected event on seat-booking to not be able to select occupied seat '${evalResult.attr}'`);
+      throw new Error(`Expected event on seat-booking to be able to override-select occupied seat '${evalResult.attr}'`);
     }
   }
 }
