@@ -7,6 +7,8 @@ interface IRowOfTablesProps {
 
   occupied: string[];
 
+  canOverride: boolean;
+
   indexOffset: number;
   tableCount: number;
   selectedId: string;
@@ -25,13 +27,14 @@ function arrayOfLength(length: number) {
   return arr;
 }
 const RowOfTables = (props: IRowOfTablesProps) => {
-  const { onClick, occupied, tableCount, selectedId, originX, originY, angle, indexOffset } = props;
+  const { onClick, canOverride, occupied, tableCount, selectedId, originX, originY, angle, indexOffset } = props;
   return (
     <g className="SEATBOOKING-rowOfTables" transform={`rotate(${-angle}) translate(${originX}, ${originY})`}>
       {
         arrayOfLength(tableCount).map((el, index) => (
           <g key={index.toString()} transform={`translate(0,${index * SeatSize})`}>
             <Table
+              canOverride={canOverride}
               occupied={occupied}
               selectedId={selectedId}
               onClick={onClick}

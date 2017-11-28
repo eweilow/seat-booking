@@ -14,6 +14,7 @@ import RowOfTables from "./rowOfTables";
 import { SeatSize } from "./seat";
 
 export interface IRootComponentProps {
+  canOverride: boolean;
   layout: number[];
   occupied: string[];
   selectedId: string;
@@ -119,8 +120,7 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
     this.props.onSeatSelected(id);
   }
 
-  public render({layout, occupied}: IRootComponentProps) {
-    console.log(this.state.rows);
+  public render({layout, occupied, canOverride}: IRootComponentProps) {
     return (
       <div
         className="SEATBOOKING-root"
@@ -136,6 +136,8 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
               this.state.rows.map((el, index) => (
                 <RowOfTables
                   key={index.toString()}
+
+                  canOverride={canOverride}
 
                   occupied={occupied}
                   indexOffset={el.indexOffset}

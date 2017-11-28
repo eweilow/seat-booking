@@ -1,7 +1,7 @@
 import { h, render } from "preact";
 import RootComponent, { IRootComponentProps } from "./components/root";
 
-type SeatBookingAttribute = "data-layout" | "data-occupied" | "data-selected-seat";
+type SeatBookingAttribute = "data-layout" | "data-occupied" | "data-selected-seat" | "data-can-override";
 
 export default function createSeatBookingClass() {
   return class SeatBooking extends HTMLElement {
@@ -12,6 +12,7 @@ export default function createSeatBookingClass() {
     private occupied: string[] = [];
     private canRender: boolean = false;
     private selectedSeat: string = null;
+    private canOverride: boolean = false;
 
     private set layoutAttribute(value: string) {
       if (value == null || !/^\d+(?:\,\d+)*$/.test(value)) {
@@ -44,12 +45,16 @@ export default function createSeatBookingClass() {
       }
       this.selectedSeat = value;
     }
+    private set canOverrideAttribute(value: string) {
+      this.canOverride = value === "true";
+    }
 
     static get observedAttributes(): SeatBookingAttribute[] {
       return [
         "data-layout",
         "data-occupied",
-        "data-selected-seat"
+        "data-selected-seat",
+        "data-can-override"
       ];
     }
 
@@ -68,11 +73,19 @@ export default function createSeatBookingClass() {
       this.selectedSeat = seatId;
       this.setAttribute("data-selected-seat", seatId);
 
-      this.dispatchEvent(new CustomEvent("seat-selected", { detail: { seatId }}));
+      this.dispatchEvent(
+        new CustomEvent("seat-selected", { 
+          detail: { 
+            seatId,
+            isOccupied: this.occupied.indexOf(seatId) >= 0
+          }
+        })
+      );
     }
 
     private renderChildren(replaceNode?: Element): Element {
       const props: IRootComponentProps = {
+        canOverride: this.canOverride,
         layout: this.layout,
         occupied: this.occupied,
         onSeatSelected: this.onSeatSelected,
@@ -88,6 +101,8 @@ export default function createSeatBookingClass() {
         this.occupiedAttribute = newValue;
       } else if (attribute === "data-selected-seat") {
         this.selectedSeatAttribute = newValue;
+      } else if (attribute === "data-can-override") {
+        this.canOverrideAttribute = newValue;
       }
 
       if (this.canRender) {
