@@ -29,6 +29,9 @@ The `data-occupied`-attribute says which seats are occupied and cannot be select
 
 The `data-selected-seat` is set automatically when a seat is selected and represents the ID of the seat which is selected. In the picture above, it's the orange seat with ID `1`.
 
+### Important
+Attributes need to be set with [Element.setAttribute()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute) (or equivalent) or the element is not guaranteed to work in all browsers due to polyfills.
+
 ## Events
 To detect when a seat has been selected, the `seat-selected` event should be used on the web component itself.
 This can be done like this:
