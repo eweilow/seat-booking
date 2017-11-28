@@ -29,6 +29,8 @@ The `data-occupied`-attribute says which seats are occupied and cannot be select
 
 The `data-selected-seat` is set automatically when a seat is selected and represents the ID of the seat which is selected. In the picture above, it's the orange seat with ID `1`.
 
+The `data-can-override` tells the component to be able to select already occupied seats, which is useful for admin interfaces. Set to exactly `"true"` (`data-can-override="true"`) to set to enabled mode.
+
 ### Important
 Attributes need to be set with [Element.setAttribute()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute) (or equivalent) or the element is not guaranteed to work in all browsers due to polyfills.
 
@@ -39,5 +41,8 @@ This can be done like this:
 const booking = document.querySelector("seat-booking");
 booking.addEventListener("seat-selected", function(e) {
   console.log("Selected seat: %s", e.detail.seatId);
+
+  //If the data-can-override is set to "true", an occupied seat can be selected and e.detail.isOccupied is true only then. Otherwise it's always false.
+  console.log("Seat is occupied: %s", e.detail.isOccupied);
 });
 ```
