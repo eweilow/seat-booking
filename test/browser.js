@@ -36,7 +36,7 @@ async function tests(page, browser) {
 
   await runSelectSeatTests(page, rootHandle);
   await runOccupiedSeatTests(page, rootHandle);
-  await runOccupiedOverrideSeatTests(page, rootHandle);
+  await runOverrideOccupiedSeatTests(page, rootHandle);
 }
 
 let server;

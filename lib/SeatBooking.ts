@@ -61,8 +61,8 @@ export default function createSeatBookingClass() {
     private connectedCallback(): void {
       if (!this.shadow) {
         this.shadow = "shadowRoot" in HTMLElement.prototype
-        ? this.attachShadow({ mode: "open" }) as Element | ShadowRoot
-        : this;
+          ? this.attachShadow({ mode: "open" }) as Element | ShadowRoot
+          : this;
       }
 
       this.renderedNode = this.renderChildren(this.renderedNode);
@@ -74,8 +74,8 @@ export default function createSeatBookingClass() {
       this.setAttribute("data-selected-seat", seatId);
 
       this.dispatchEvent(
-        new CustomEvent("seat-selected", { 
-          detail: { 
+        new CustomEvent("seat-selected", {
+          detail: {
             seatId,
             isOccupied: this.occupied.indexOf(seatId) >= 0
           }
