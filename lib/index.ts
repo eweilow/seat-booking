@@ -17,18 +17,16 @@ function loadScript(src) {
 }
 if (!("customElements" in window && "define" in customElements)
 ) {
-
   console.info("[seat-booking] fetching custom-elements polyfill");
-
   Promise.all([
     loadScript("custom-elements.min.js")
   ]).then(() => init())
     .catch(err => console.error(err));
-
 } else {
-  Promise.all([
+  /*Promise.all([
     loadScript("custom-elements.min.js")
   ]).then(() => init())
-    .catch(err => console.error(err));
+    .catch(err => console.error(err));*/
   console.info("[seat-booking] running native custom-elements");
+  init();
 }
