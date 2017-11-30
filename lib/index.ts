@@ -26,9 +26,5 @@ if (!("customElements" in window && "define" in customElements)
     .catch(err => console.error(err));
 
 } else {
-  Promise.all([
-    loadScript("custom-elements.min.js")
-  ]).then(() => init())
-    .catch(err => console.error(err));
   console.info("[seat-booking] running native custom-elements");
 }
