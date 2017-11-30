@@ -47,9 +47,10 @@ let server;
 
   const browser = await puppeteer.launch({ 
     headless,
-    slowMo: headless ? 0 : 250
+    slowMo: headless ? 0 : 250,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
-
+  
   const page = await browser.newPage();
   await page.goto(`http://localhost:${port}`);
 
