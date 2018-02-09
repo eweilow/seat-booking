@@ -1,7 +1,7 @@
 import { h, render } from "preact";
 import RootComponent, { IRootComponentProps } from "./components/root";
 
-type SeatBookingAttribute = "data-layout" | "data-names" | "data-offsets" | "data-occupied" | "data-selected-seat" | "data-can-override";
+type SeatBookingAttribute = "data-layout" | "data-names" | "data-offsets" | "data-occupied" | "data-selected-seat" | "data-can-override" | "data-seatnames";
 
 export default function createSeatBookingClass() {
   return class SeatBooking extends HTMLElement {
@@ -12,6 +12,7 @@ export default function createSeatBookingClass() {
     private offsets?: number[];
     private names?: string[];
     private occupied: string[] = [];
+    private seatnames?: string[];
     private canRender: boolean = false;
     private selectedSeat: string = null;
     private canOverride: boolean = false;
@@ -34,6 +35,15 @@ export default function createSeatBookingClass() {
         );
       }
       this.names = value.split(",")
+        .filter(el => el.length > 0);
+    }
+    private set seatnamesAttribute(value: string) {
+      if (value == null || !/^[^,]+(?:\,[^,]+)*$/.test(value)) {
+        throw new Error(
+          `Expected attribute data-seatnames with value '${value}' to be valid (regexp: /^\d+(?:\,\d+)*$/)`
+        );
+      }
+      this.seatnames = value.split(",")
         .filter(el => el.length > 0);
     }
     private set offsetsAttribute(value: string) {
@@ -78,7 +88,8 @@ export default function createSeatBookingClass() {
         "data-names",
         "data-occupied",
         "data-selected-seat",
-        "data-can-override"
+        "data-can-override",
+        "data-seatnames"
       ];
     }
 
@@ -114,6 +125,7 @@ export default function createSeatBookingClass() {
         offsets: this.offsets,
         names: this.names,
         occupied: this.occupied,
+        seatnames: this.seatnames,
         onSeatSelected: this.onSeatSelected,
         selectedId: this.selectedSeat
       };
@@ -133,6 +145,8 @@ export default function createSeatBookingClass() {
         this.selectedSeatAttribute = newValue;
       } else if (attribute === "data-can-override") {
         this.canOverrideAttribute = newValue;
+      } else if (attribute === "data-seatnames") {
+        this.seatnamesAttribute = newValue
       }
 
       if (this.canRender) {

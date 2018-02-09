@@ -20,6 +20,7 @@ export interface IRootComponentProps {
   offsets?: number[];
   occupied: string[];
   selectedId: string;
+  seatnames?: string[];
   onSeatSelected: (id: string) => void;
 }
 
@@ -112,8 +113,8 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
     this.setState({
       rows,
       selectedId: props.selectedId,
-      maxWidth,
-      maxHeight
+      maxWidth: Math.ceil(maxWidth),
+      maxHeight: Math.ceil(maxHeight)
     });
   }
 
@@ -124,38 +125,43 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
     this.props.onSeatSelected(id);
   }
 
-  public render({names, layout, occupied, canOverride}: IRootComponentProps) {
+  public render({ seatnames, names, layout, occupied, canOverride }: IRootComponentProps) {
+    const Margin = 20;
     return (
       <div
         className="SEATBOOKING-root"
         style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}
       >
         <style>{styles.toString()}</style>
-        <svg width={this.state.maxWidth} height={this.state.maxHeight}>
+        <svg width={this.state.maxWidth + Margin*2} height={this.state.maxHeight + Margin*2}>
           <defs>
             <OccupiedSeatPattern size={10} id="occupied"/>
           </defs>
-          <g transform={`translate(${SeatSize}, ${SeatSize})`}>
-            {
-              this.state.rows.map((el, index) => (
-                <RowOfTables
-                  key={index.toString()}
+          <g transform={`translate(${Margin}, ${Margin})`}>
+            <g transform={`translate(${SeatSize}, ${SeatSize})`}>
+              {
+                this.state.rows.map((el, index) => (
+                  <RowOfTables
+                    key={index.toString()}
 
-                  name={names && names[index]}
+                    name={names && names[index]}
 
-                  canOverride={canOverride}
+                    canOverride={canOverride}
 
-                  occupied={occupied}
-                  indexOffset={el.indexOffset}
-                  originX={el.x}
-                  originY={el.y}
-                  angle={el.angle}
-                  selectedId={this.state.selectedId}
-                  onClick={this.onSeatClicked}
-                  tableCount={el.seatGroups}
-                />
-              ))
-            }
+                    seatnames={seatnames}
+
+                    occupied={occupied}
+                    indexOffset={el.indexOffset}
+                    originX={el.x}
+                    originY={el.y}
+                    angle={el.angle}
+                    selectedId={this.state.selectedId}
+                    onClick={this.onSeatClicked}
+                    tableCount={el.seatGroups}
+                  />
+                ))
+              }
+            </g>
           </g>
           <style>{seatStyles.toString()}</style>
         </svg>
