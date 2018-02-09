@@ -1,7 +1,7 @@
 import { h, render } from "preact";
 import RootComponent, { IRootComponentProps } from "./components/root";
 
-type SeatBookingAttribute = "data-layout" | "data-offsets" | "data-occupied" | "data-selected-seat" | "data-can-override";
+type SeatBookingAttribute = "data-layout" | "data-names" | "data-offsets" | "data-occupied" | "data-selected-seat" | "data-can-override";
 
 export default function createSeatBookingClass() {
   return class SeatBooking extends HTMLElement {
@@ -10,6 +10,7 @@ export default function createSeatBookingClass() {
 
     private layout: number[] = [];
     private offsets?: number[];
+    private names?: string[];
     private occupied: string[] = [];
     private canRender: boolean = false;
     private selectedSeat: string = null;
@@ -25,6 +26,15 @@ export default function createSeatBookingClass() {
         .filter(el => el.length > 0)
         .map(str => parseInt(str, 10))
         .filter(el => !isNaN(el));
+    }
+    private set namesAttribute(value: string) {
+      if (value == null || !/^[^,]+(?:\,[^,]+)*$/.test(value)) {
+        throw new Error(
+          `Expected attribute data-offsets with value '${value}' to be valid (regexp: /^\d+(?:\,\d+)*$/)`
+        );
+      }
+      this.names = value.split(",")
+        .filter(el => el.length > 0);
     }
     private set offsetsAttribute(value: string) {
       if (value == null || !/^\d+(?:\,\d+)*$/.test(value)) {
@@ -65,6 +75,7 @@ export default function createSeatBookingClass() {
       return [
         "data-layout",
         "data-offsets",
+        "data-names",
         "data-occupied",
         "data-selected-seat",
         "data-can-override"
@@ -101,6 +112,7 @@ export default function createSeatBookingClass() {
         canOverride: this.canOverride,
         layout: this.layout,
         offsets: this.offsets,
+        names: this.names,
         occupied: this.occupied,
         onSeatSelected: this.onSeatSelected,
         selectedId: this.selectedSeat
@@ -111,6 +123,8 @@ export default function createSeatBookingClass() {
     private attributeChangedCallback(attribute: SeatBookingAttribute, oldValue: string, newValue: string) {
       if (attribute === "data-layout") {
         this.layoutAttribute = newValue;
+      } else if (attribute === "data-names") {
+        this.namesAttribute = newValue;
       } else if (attribute === "data-offsets") {
         this.offsetsAttribute = newValue;
       } else if (attribute === "data-occupied") {
