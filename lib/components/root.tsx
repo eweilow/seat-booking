@@ -137,6 +137,7 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
           <defs>
             <OccupiedSeatPattern size={10} id="occupied"/>
           </defs>
+          { seatnames && <text>{seatnames[this.state.selectedId]}</text> }
           <g transform={`translate(${Margin}, ${Margin})`}>
             <g transform={`translate(${SeatSize}, ${SeatSize})`}>
               {
