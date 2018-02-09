@@ -16,6 +16,7 @@ import { SeatSize } from "./seat";
 export interface IRootComponentProps {
   canOverride: boolean;
   layout: number[];
+  offsets?: number[];
   occupied: string[];
   selectedId: string;
   onSeatSelected: (id: string) => void;
@@ -64,10 +65,12 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
     let maxHeight = 0;
     let maxWidth = 0;
 
-    const startRadius = Math.floor(5.5 * SeatSize);
-
     let indexOffset = 0;
     for (let i = 0; i < props.layout.length; i++) {
+      let startRadius = props.offsets 
+        ? Math.floor(SeatSize * (5 + props.offsets[i])) 
+        : Math.floor(SeatSize * 5);
+
       const radAngle = (Math.PI / 180) * deltaAngle * i;
 
       maxWidth = Math.max(
