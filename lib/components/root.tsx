@@ -16,8 +16,11 @@ import { SeatSize } from "./seat";
 export interface IRootComponentProps {
   canOverride: boolean;
   layout: number[];
+  names?: string[];
+  offsets?: number[];
   occupied: string[];
   selectedId: string;
+  seatnames?: string[];
   onSeatSelected: (id: string) => void;
 }
 
@@ -64,10 +67,12 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
     let maxHeight = 0;
     let maxWidth = 0;
 
-    const startRadius = Math.floor(5.5 * SeatSize);
-
     let indexOffset = 0;
     for (let i = 0; i < props.layout.length; i++) {
+      let startRadius = props.offsets && Array.isArray(props.offsets) && props.offsets.length === props.layout.length
+        ? Math.floor(SeatSize * (5 + props.offsets[i])) 
+        : Math.floor(SeatSize * 5);
+
       const radAngle = (Math.PI / 180) * deltaAngle * i;
 
       maxWidth = Math.max(
@@ -108,8 +113,8 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
     this.setState({
       rows,
       selectedId: props.selectedId,
-      maxWidth,
-      maxHeight
+      maxWidth: Math.ceil(maxWidth),
+      maxHeight: Math.ceil(maxHeight)
     });
   }
 
@@ -120,36 +125,44 @@ export default class RootComponent extends Component<IRootComponentProps, IRootC
     this.props.onSeatSelected(id);
   }
 
-  public render({layout, occupied, canOverride}: IRootComponentProps) {
+  public render({ seatnames, names, layout, occupied, canOverride }: IRootComponentProps) {
+    const Margin = 20;
     return (
       <div
         className="SEATBOOKING-root"
         style={`min-width: ${this.state.maxWidth}px; min-height: ${this.state.maxHeight}px`}
       >
         <style>{styles.toString()}</style>
-        <svg width={this.state.maxWidth} height={this.state.maxHeight}>
+        <svg width={this.state.maxWidth + Margin*2} height={this.state.maxHeight + Margin*2}>
           <defs>
             <OccupiedSeatPattern size={10} id="occupied"/>
           </defs>
-          <g transform={`translate(${SeatSize}, ${SeatSize})`}>
-            {
-              this.state.rows.map((el, index) => (
-                <RowOfTables
-                  key={index.toString()}
+          { seatnames && <text>{seatnames[this.state.selectedId]}</text> }
+          <g transform={`translate(${Margin}, ${Margin})`}>
+            <g transform={`translate(${SeatSize}, ${SeatSize})`}>
+              {
+                this.state.rows.map((el, index) => (
+                  <RowOfTables
+                    key={index.toString()}
 
-                  canOverride={canOverride}
+                    name={names && names[index]}
 
-                  occupied={occupied}
-                  indexOffset={el.indexOffset}
-                  originX={el.x}
-                  originY={el.y}
-                  angle={el.angle}
-                  selectedId={this.state.selectedId}
-                  onClick={this.onSeatClicked}
-                  tableCount={el.seatGroups}
-                />
-              ))
-            }
+                    canOverride={canOverride}
+
+                    seatnames={seatnames}
+
+                    occupied={occupied}
+                    indexOffset={el.indexOffset}
+                    originX={el.x}
+                    originY={el.y}
+                    angle={el.angle}
+                    selectedId={this.state.selectedId}
+                    onClick={this.onSeatClicked}
+                    tableCount={el.seatGroups}
+                  />
+                ))
+              }
+            </g>
           </g>
           <style>{seatStyles.toString()}</style>
         </svg>

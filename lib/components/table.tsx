@@ -4,6 +4,8 @@ import Seat, { SeatSize } from "./seat";
 interface ITableProps {
   occupied: string[];
 
+  seatnames?: string[];
+
   canOverride: boolean;
 
   leftSeatId: string;
@@ -11,7 +13,7 @@ interface ITableProps {
   selectedId: string;
   onClick: (id: string) => void;
 }
-const Table = ({ occupied, leftSeatId, rightSeatId, selectedId, canOverride, onClick }: ITableProps) => {
+const Table = ({ seatnames, occupied, leftSeatId, rightSeatId, selectedId, canOverride, onClick }: ITableProps) => {
   return (
     <g>
       <g transform={`translate(0,0)`}>
@@ -22,6 +24,20 @@ const Table = ({ occupied, leftSeatId, rightSeatId, selectedId, canOverride, onC
           id={leftSeatId}
           onClick={onClick}
         />
+        {
+          seatnames && (
+            <text
+              text-anchor="end"
+              alignment-baseline="central"
+              x={-4}
+              y={SeatSize/2}
+              font-family="Righteous, sans-serif"
+              font-size={SeatSize * 0.45}
+            >
+              {seatnames[leftSeatId]}
+            </text>
+          )
+        }
       </g>
       <g transform={`translate(${SeatSize},0)`}>
         <Seat
@@ -31,6 +47,20 @@ const Table = ({ occupied, leftSeatId, rightSeatId, selectedId, canOverride, onC
           id={rightSeatId}
           onClick={onClick}
         />
+        {
+          seatnames && (
+            <text
+              text-anchor="start"
+              alignment-baseline="central"
+              x={4 + SeatSize}
+              y={SeatSize/2}
+              font-family="Righteous, sans-serif"
+              font-size={SeatSize * 0.45}
+            >
+              {seatnames[rightSeatId]}
+            </text>
+          )
+        }
       </g>
     </g>
   );

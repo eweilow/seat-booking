@@ -1,7 +1,7 @@
 import { h, render } from "preact";
 import RootComponent, { IRootComponentProps } from "./components/root";
 
-type SeatBookingAttribute = "data-layout" | "data-occupied" | "data-selected-seat" | "data-can-override";
+type SeatBookingAttribute = "data-layout" | "data-names" | "data-offsets" | "data-occupied" | "data-selected-seat" | "data-can-override" | "data-seatnames";
 
 export default function createSeatBookingClass() {
   return class SeatBooking extends HTMLElement {
@@ -9,7 +9,10 @@ export default function createSeatBookingClass() {
     private renderedNode: Element;
 
     private layout: number[] = [];
+    private offsets?: number[];
+    private names?: string[];
     private occupied: string[] = [];
+    private seatnames?: string[];
     private canRender: boolean = false;
     private selectedSeat: string = null;
     private canOverride: boolean = false;
@@ -21,6 +24,35 @@ export default function createSeatBookingClass() {
         );
       }
       this.layout = value.split(",")
+        .filter(el => el.length > 0)
+        .map(str => parseInt(str, 10))
+        .filter(el => !isNaN(el));
+    }
+    private set namesAttribute(value: string) {
+      if (value == null || !/^[^,]+(?:\,[^,]+)*$/.test(value)) {
+        throw new Error(
+          `Expected attribute data-offsets with value '${value}' to be valid (regexp: /^\d+(?:\,\d+)*$/)`
+        );
+      }
+      this.names = value.split(",")
+        .filter(el => el.length > 0);
+    }
+    private set seatnamesAttribute(value: string) {
+      if (value == null || !/^[^,]+(?:\,[^,]+)*$/.test(value)) {
+        throw new Error(
+          `Expected attribute data-seatnames with value '${value}' to be valid (regexp: /^\d+(?:\,\d+)*$/)`
+        );
+      }
+      this.seatnames = value.split(",")
+        .filter(el => el.length > 0);
+    }
+    private set offsetsAttribute(value: string) {
+      if (value == null || !/^\d+(?:\,\d+)*$/.test(value)) {
+        throw new Error(
+          `Expected attribute data-offsets with value '${value}' to be valid (regexp: /^\d+(?:\,\d+)*$/)`
+        );
+      }
+      this.offsets = value.split(",")
         .filter(el => el.length > 0)
         .map(str => parseInt(str, 10))
         .filter(el => !isNaN(el));
@@ -52,9 +84,12 @@ export default function createSeatBookingClass() {
     static get observedAttributes(): SeatBookingAttribute[] {
       return [
         "data-layout",
+        "data-offsets",
+        "data-names",
         "data-occupied",
         "data-selected-seat",
-        "data-can-override"
+        "data-can-override",
+        "data-seatnames"
       ];
     }
 
@@ -87,7 +122,10 @@ export default function createSeatBookingClass() {
       const props: IRootComponentProps = {
         canOverride: this.canOverride,
         layout: this.layout,
+        offsets: this.offsets,
+        names: this.names,
         occupied: this.occupied,
+        seatnames: this.seatnames,
         onSeatSelected: this.onSeatSelected,
         selectedId: this.selectedSeat
       };
@@ -97,12 +135,18 @@ export default function createSeatBookingClass() {
     private attributeChangedCallback(attribute: SeatBookingAttribute, oldValue: string, newValue: string) {
       if (attribute === "data-layout") {
         this.layoutAttribute = newValue;
+      } else if (attribute === "data-names") {
+        this.namesAttribute = newValue;
+      } else if (attribute === "data-offsets") {
+        this.offsetsAttribute = newValue;
       } else if (attribute === "data-occupied") {
         this.occupiedAttribute = newValue;
       } else if (attribute === "data-selected-seat") {
         this.selectedSeatAttribute = newValue;
       } else if (attribute === "data-can-override") {
         this.canOverrideAttribute = newValue;
+      } else if (attribute === "data-seatnames") {
+        this.seatnamesAttribute = newValue
       }
 
       if (this.canRender) {

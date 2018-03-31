@@ -12,6 +12,8 @@ The simplest usage of the component is as follows:
   <body>
     <seat-booking
       data-layout="6,5,8,8"
+      data-offsets="1,2,1,0"
+      data-names="A,B,F,X"
       data-occupied="1,15,22,43"
       data-selected-seat="1"
     ></seat-booking>

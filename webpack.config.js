@@ -2,6 +2,8 @@ const MinifyPlugin = require("babel-minify-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
+const path = require("path");
+
 module.exports = {
   entry: "./lib/index.ts",
   output: {
@@ -34,5 +36,10 @@ module.exports = {
       { context: "node_modules/@webcomponents/webcomponentsjs", from: "custom-elements-es5-adapter.js", to: "dist" } 
     ])
   ],
-  devtool: process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map"
+  devtool: process.env.NODE_ENV === "production" ? "source-map" : "inline-source-map",
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    port: 9000,
+    hot: true
+  }
 };
